@@ -1,6 +1,6 @@
 {
   "name": "com-epam-dhl-cordova-push-delivery",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "DHL notifications extension",
   "main": "www/CordovaPushDelivery.js",
   "author": "Oleksii Lubianyi, EPAM",
