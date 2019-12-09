@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="com-epam-notifications-extension" version="1.0.0">
+
+  <name>DHL notifications extension</name>
+
+  <engines>
+    <engine name="cordova-android" version=">=4.1.0"/>
+    <engine name="cordova-ios" version=">=4.3.0"/>
+  </engines>
+
+  <dependency id="cordova-plugin-add-swift-support"/>
+
+  <hook type="after_prepare" src="scripts/integrate_notification_extension.js"/>
+
+  <platform name="ios">
+    <config-file parent="UIBackgroundModes" target="*Info.plist">
+      <array>
+        <string>remote-notification</string>
+      </array>
+    </config-file>
+
+    <config-file parent="aps-environment" target="*/Entitlements-Debug.plist">
+      <string>development</string>
+    </config-file>
+
+    <config-file parent="aps-environment" target="*/Entitlements-Release.plist">
+      <string>production</string>
+    </config-file>
+
+    <source-file src="src/ios/MobileMessagingCordova.swift" />
+  </platform>
+
+  <!--
+  <platform name="android">
+    <config-file target="config.xml" parent="/*">
+      <feature name="MobileMessagingCordova">
+        <param name="android-package" value="org.apache.cordova.plugin.MobileMessagingCordova"/>
+      </feature>
+
+      <preference name="IB_ANDROID_SUPPORT_VER_OVERRIDE" value="$ANDROID_SUPPORT_VER_OVERRIDE"/>
+      <preference name="IB_ANDROID_GMS_VER_OVERRIDE" value="$ANDROID_GMS_VER_OVERRIDE"/>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <receiver android:name="org.apache.cordova.plugin.MobileMessagingCordova$MessageActionReceiver" android:exported="false">
+        <intent-filter>
+          <action android:name="org.infobip.mobile.messaging.MESSAGE_RECEIVED" />
+          <action android:name="org.infobip.mobile.messaging.NOTIFICATION_TAPPED" />
+        </intent-filter>
+      </receiver>
+    </config-file>
+
+    <framework src="libs/android/mobile-messaging-aar.gradle" custom="true" type="gradleReference" />
+    <source-file src="src/android/MobileMessagingCordova.java" target-dir="src/org/apache/cordova/plugin"/>
+  </platform>
+  -->
+</plugin>
