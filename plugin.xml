@@ -9,9 +9,9 @@
   </engines>
 
   <dependency id="cordova-plugin-add-swift-support"/>
-
+<!--
   <hook type="after_prepare" src="scripts/integrate_notification_extension.js"/>
-
+-->
   <platform name="ios">
     <config-file parent="UIBackgroundModes" target="*Info.plist">
       <array>
@@ -19,15 +19,21 @@
       </array>
     </config-file>
 
-    <config-file parent="aps-environment" target="*/Entitlements-Debug.plist">
-      <string>development</string>
+    <config-file parent="com.apple.security.application-groups" target="*-Debug.plist">
+      <array>
+        <string>group.__APP_IDENTIFIER__</string>
+      </array>
+    </config-file>
+    <config-file parent="com.apple.security.application-groups" target="*-Release.plist">
+      <array>
+        <string>group.__APP_IDENTIFIER__</string>
+      </array>
     </config-file>
 
-    <config-file parent="aps-environment" target="*/Entitlements-Release.plist">
-      <string>production</string>
-    </config-file>
-
-    <source-file src="src/ios/NotificationsServiceExtension.swift" />
+    <hook type="after_platform_add" src="hooks/prerequisites.js"/>
+    <hook type="after_platform_add" src="hooks/copyExtensionFolderToIosProjectFolder.js"/>
+    <hook type="after_platform_add" src="hooks/addTodayWidgetToProject.js"/>
+    <hook type="after_prepare" src="hooks/fixAppEntitlements.js"/>
   </platform>
 
   <!--
