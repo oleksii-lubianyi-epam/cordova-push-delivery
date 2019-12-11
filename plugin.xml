@@ -8,7 +8,6 @@
     <engine name="cordova-ios" version=">=4.3.0"/>
   </engines>
 
-  <dependency id="cordova-plugin-add-swift-support"/>
 <!--
   <hook type="after_prepare" src="scripts/integrate_notification_extension.js"/>
 -->
