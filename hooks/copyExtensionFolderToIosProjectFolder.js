@@ -137,8 +137,7 @@ module.exports = function(context) {
     } else {
         srcFolder = path.join(
           context.opts.projectRoot,
-          'www',
-          widgetName + '/'
+          'plugins/com-epam-dhl-cordova-push-delivery/src/ios/'
         );
     }
     if (!fs.existsSync(srcFolder)) {

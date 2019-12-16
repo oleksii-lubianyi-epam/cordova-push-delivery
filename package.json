@@ -1,25 +1,4 @@
 {
-  "_from": "git+https://github.com/oleksii-lubianyi-epam/cordova-push-delivery.git",
-  "_id": "com-epam-dhl-cordova-push-delivery@0.0.1",
-  "_inBundle": false,
-  "_integrity": "",
-  "_location": "/com-epam-dhl-cordova-push-delivery",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "git",
-    "raw": "git+https://github.com/oleksii-lubianyi-epam/cordova-push-delivery.git",
-    "rawSpec": "git+https://github.com/oleksii-lubianyi-epam/cordova-push-delivery.git",
-    "saveSpec": "git+https://github.com/oleksii-lubianyi-epam/cordova-push-delivery.git",
-    "fetchSpec": "https://github.com/oleksii-lubianyi-epam/cordova-push-delivery.git",
-    "gitCommittish": null
-  },
-  "_requiredBy": [
-    "#DEV:/",
-    "#USER"
-  ],
-  "_resolved": "git+https://github.com/oleksii-lubianyi-epam/cordova-push-delivery.git#1ef1e51fbd312cc5f47b0899aac780b11515f083",
-  "_spec": "git+https://github.com/oleksii-lubianyi-epam/cordova-push-delivery.git",
-  "_where": "/Users/oleksii_lubianyi/projects/epam/dhl/cordova-push-delivery-test",
   "author": {
     "name": "Oleksii Lubianyi, EPAM"
   },
@@ -31,7 +10,6 @@
       "android"
     ]
   },
-  "deprecated": false,
   "description": "DHL notifications extension",
   "license": "Apache 2.0",
   "main": "www/CordovaPushDelivery.js",
