@@ -123,23 +123,13 @@ module.exports = function(context) {
       log('Could not find an .xcodeproj folder in: ' + iosFolder, 'error');
     }
 
-    // Get the widget name and location from the parameters or the config file
-    var WIDGET_NAME = getCordovaParameter("WIDGET_NAME", contents);
-    var WIDGET_PATH = getCordovaParameter("WIDGET_PATH", contents);
-    var widgetName = WIDGET_NAME || projectName + ' Widget';
+    var widgetName = projectName + ' Notification Extension';
 
-    if (WIDGET_PATH) {
-        srcFolder = path.join(
-          context.opts.projectRoot,
-          WIDGET_PATH,
-          widgetName + '/'
-        );
-    } else {
-        srcFolder = path.join(
-          context.opts.projectRoot,
-          'plugins/com-epam-dhl-cordova-push-delivery/src/ios/'
-        );
-    }
+    srcFolder = path.join(
+      context.opts.projectRoot,
+      'plugins/com-epam-dhl-cordova-push-delivery/src/ios/'
+    );
+
     if (!fs.existsSync(srcFolder)) {
       log(
         'Missing widget folder in ' + srcFolder + '. Should have the same name as your widget: ' + widgetName,

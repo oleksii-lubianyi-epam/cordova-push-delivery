@@ -83,10 +83,6 @@ module.exports = function (context) {
     'utf-8'
   );
 
-  // Get the plugin variables from the parameters or the config file
-  var WIDGET_NAME = getCordovaParameter("WIDGET_NAME", contents);
-  var ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = getCordovaParameter("ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", contents);
-
   if (contents) {
     contents = contents.substring(contents.indexOf('<'));
   }
@@ -122,13 +118,13 @@ module.exports = function (context) {
         pbxProject.parseSync();
       }
 
-      var extensionName = projectName + ' Notification Extension';
-      log('Your widget will be named: ' + extensionName, 'info');
+      var widgetName = projectName + ' Notification Extension';
+      log('Your widget will be named: ' + widgetName, 'info');
 
-      var extensionBundleId = 'notificationExtension';
-      log('Your widget bundle id will be: ' + bundleId + '.' + extensionBundleId, 'info');
+      var widgetBundleId = 'notificationExtension';
+      log('Your widget bundle id will be: ' + bundleId + '.' + widgetBundleId, 'info');
 
-      var extensionFolder = path.join(iosFolder, extensionName);
+      var widgetFolder = path.join(context.opts.projectRoot, 'plugins/com-epam-dhl-cordova-push-delivery/src/ios/');
       var sourceFiles = [];
       var resourceFiles = [];
       var configFiles = [];
@@ -153,7 +149,7 @@ module.exports = function (context) {
         },
         {
           placeHolder: '__BUNDLE_SUFFIX__',
-          value: extensionBundleId
+          value: widgetBundleId
         },
         {
           placeHolder: '__BUNDLE_SHORT_VERSION_STRING__',
@@ -165,7 +161,7 @@ module.exports = function (context) {
         }
       ];
 
-      fs.readdirSync(extensionFolder).forEach(file => {
+      fs.readdirSync(widgetFolder).forEach(file => {
         if (!/^\..*/.test(file)) {
           // Ignore junk files like .DS_Store
           var fileExtension = path.extname(file);
@@ -188,14 +184,14 @@ module.exports = function (context) {
             case '.entitlements':
             case '.xcconfig':
               if (fileExtension === '.plist') {
-                replacePlaceholdersInPlist(path.join(extensionFolder, file), placeHolderValues);
+                replacePlaceholdersInPlist(path.join(widgetFolder, file), placeHolderValues);
               }
               if (fileExtension === '.xcconfig') {
                 addXcconfig = true;
                 xcconfigFileName = file;
               }
               if (fileExtension === '.entitlements') {
-                replacePlaceholdersInPlist(path.join(extensionFolder, file), placeHolderValues);
+                replacePlaceholdersInPlist(path.join(widgetFolder, file), placeHolderValues);
                 addEntitlementsFile = true;
                 entitlementsFileName = file;
               }
@@ -209,7 +205,7 @@ module.exports = function (context) {
         }
       });
 
-      log('Found following files in your extension folder:', 'info');
+      log('Found following files in your widget folder:', 'info');
       console.log('Source-files: ');
       sourceFiles.forEach(file => {
         console.log(' - ', file);
@@ -227,24 +223,24 @@ module.exports = function (context) {
 
       // Add PBXNativeTarget to the project
       var target = pbxProject.addTarget(
-        extensionName,
+        widgetName,
         'app_extension',
-        extensionName
+        widgetName
       );
       if (target) {
         log('Successfully added PBXNativeTarget!', 'info');
       }
 
-      // Create a separate PBXGroup for the extension files, name has to be unique and path must be in quotation marks
+      // Create a separate PBXGroup for the widgets files, name has to be unique and path must be in quotation marks
       var pbxGroupKey = pbxProject.pbxCreateGroup(
-        'Extension',
-        '"' + extensionName + '"'
+        'Notification Extension',
+        '"' + widgetName + '"'
       );
       if (pbxGroupKey) {
         log(
           'Successfully created empty PbxGroup for folder: ' +
-          extensionName +
-          ' with alias: Extension',
+          widgetName +
+          ' with alias: Notification Extension',
           'info'
         );
       }
@@ -255,7 +251,7 @@ module.exports = function (context) {
       });
       pbxProject.addToPbxGroup(pbxGroupKey, customTemplateKey);
       log(
-        'Successfully added the extension PbxGroup to cordovas CustomTemplate!',
+        'Successfully added the widgets PbxGroup to cordovas CustomTemplate!',
         'info'
       );
 
@@ -299,7 +295,7 @@ module.exports = function (context) {
         'info'
       );
 
-      // Add a new PBXFrameworksBuildPhase for the Frameworks used by the extension (NotificationCenter.framework, libCordova.a)
+      // Add a new PBXFrameworksBuildPhase for the Frameworks used by the widget (NotificationCenter.framework, libCordova.a)
       var frameworksBuildPhase = pbxProject.addBuildPhase(
         [],
         'PBXFrameworksBuildPhase',
@@ -310,7 +306,7 @@ module.exports = function (context) {
         log('Successfully added PBXFrameworksBuildPhase!', 'info');
       }
 
-      // Add the frameworks needed by our extension, add them to the existing Frameworks PbxGroup and PBXFrameworksBuildPhase
+      // Add the frameworks needed by our widget, add them to the existing Frameworks PbxGroup and PBXFrameworksBuildPhase
       var frameworkFile1 = pbxProject.addFramework(
         'NotificationCenter.framework',
         { target: target.uuid }
@@ -319,10 +315,9 @@ module.exports = function (context) {
         target: target.uuid,
       }); // seems to work because the first target is built before the second one
       if (frameworkFile1 && frameworkFile2) {
-        log('Successfully added frameworks needed by the extension!', 'info');
+        log('Successfully added frameworks needed by the widget!', 'info');
       }
 
-/*
       // Add a new PBXResourcesBuildPhase for the Resources used by the widget (MainInterface.storyboard)
       var resourcesBuildPhase = pbxProject.addBuildPhase(
         [],
@@ -347,7 +342,6 @@ module.exports = function (context) {
         'Successfully added ' + resourceFiles.length + ' resource files!',
         'info'
       );
-*/
 
       // Add build settings for Swift support, bridging header and xcconfig files
       var configurations = pbxProject.pbxXCBuildConfigurationSection();
@@ -356,25 +350,25 @@ module.exports = function (context) {
           var buildSettingsObj = configurations[key].buildSettings;
           if (typeof buildSettingsObj['PRODUCT_NAME'] !== 'undefined') {
             var productName = buildSettingsObj['PRODUCT_NAME'];
-            if (productName.indexOf('Extension') >= 0) {
+            if (productName.indexOf('Notification Extension') >= 0) {
               if (addXcconfig) {
                 configurations[key].baseConfigurationReference =
                   xcconfigReference + ' /* ' + xcconfigFileName + ' */';
                 log('Added xcconfig file reference to build settings!', 'info');
               }
               if (addEntitlementsFile) {
-                buildSettingsObj['CODE_SIGN_ENTITLEMENTS'] = '"' + extensionName + '/' + entitlementsFileName + '"';
+                buildSettingsObj['CODE_SIGN_ENTITLEMENTS'] = '"' + widgetName + '/' + entitlementsFileName + '"';
                 log('Added entitlements file reference to build settings!', 'info');
               }
               if (projectContainsSwiftFiles) {
                 buildSettingsObj['SWIFT_VERSION'] = '4.0';
-                buildSettingsObj['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES || 'YES';
+                buildSettingsObj['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES';
                 log('Added build settings for swift support!', 'info');
               }
               if (addBridgingHeader) {
                 buildSettingsObj['SWIFT_OBJC_BRIDGING_HEADER'] =
                   '"$(PROJECT_DIR)/' +
-                  extensionName +
+                  widgetName +
                   '/' +
                   bridgingHeaderName +
                   '"';
