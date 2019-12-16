@@ -233,14 +233,14 @@ module.exports = function (context) {
 
       // Create a separate PBXGroup for the widgets files, name has to be unique and path must be in quotation marks
       var pbxGroupKey = pbxProject.pbxCreateGroup(
-        'Notification Extension',
+        'NotificationExtension',
         '"' + widgetName + '"'
       );
       if (pbxGroupKey) {
         log(
           'Successfully created empty PbxGroup for folder: ' +
           widgetName +
-          ' with alias: Notification Extension',
+          ' with alias: NotificationExtension',
           'info'
         );
       }
@@ -350,7 +350,7 @@ module.exports = function (context) {
           var buildSettingsObj = configurations[key].buildSettings;
           if (typeof buildSettingsObj['PRODUCT_NAME'] !== 'undefined') {
             var productName = buildSettingsObj['PRODUCT_NAME'];
-            if (productName.indexOf('Notification Extension') >= 0) {
+            if (productName.indexOf('NotificationExtension') >= 0) {
               if (addXcconfig) {
                 configurations[key].baseConfigurationReference =
                   xcconfigReference + ' /* ' + xcconfigFileName + ' */';
