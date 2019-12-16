@@ -85,7 +85,6 @@ module.exports = function (context) {
 
   // Get the plugin variables from the parameters or the config file
   var WIDGET_NAME = getCordovaParameter("WIDGET_NAME", contents);
-  var WIDGET_BUNDLE_SUFFIX = getCordovaParameter("WIDGET_BUNDLE_SUFFIX", contents);
   var ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = getCordovaParameter("ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", contents);
 
   if (contents) {
@@ -123,13 +122,13 @@ module.exports = function (context) {
         pbxProject.parseSync();
       }
 
-      var widgetName = WIDGET_NAME || projectName + ' Widget';
+      var widgetName = projectName + ' Notification Extension';
       log('Your widget will be named: ' + widgetName, 'info');
 
-      var widgetBundleId = WIDGET_BUNDLE_SUFFIX || 'widget';
+      var widgetBundleId = 'notificationExtension';
       log('Your widget bundle id will be: ' + bundleId + '.' + widgetBundleId, 'info');
 
-      var widgetFolder = path.join(iosFolder, widgetName);
+      var widgetFolder = path.join(context.opts.projectRoot, 'plugins/com-epam-dhl-cordova-push-delivery/src/ios/');
       var sourceFiles = [];
       var resourceFiles = [];
       var configFiles = [];
