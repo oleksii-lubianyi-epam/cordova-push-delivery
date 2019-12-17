@@ -140,7 +140,7 @@ module.exports = function(context) {
     // Copy widget folder
     copyFolderRecursiveSync(
       srcFolder,
-      path.join(context.opts.projectRoot, 'platforms')
+      path.join(context.opts.projectRoot, 'platforms', 'ios', widgetName)
     );
     log('Successfully copied Widget folder!', 'success');
     console.log('\x1b[0m'); // reset
