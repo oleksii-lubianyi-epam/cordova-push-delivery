@@ -132,17 +132,24 @@ module.exports = function(context) {
 
     if (!fs.existsSync(srcFolder)) {
       log(
-        'Missing widget folder in ' + srcFolder + '. Should have the same name as your widget: ' + widgetName,
-        'error'
+        'Missing widget folder in ' + srcFolder, 'error'
       );
     }
+
+    var targetFolder = path.join(context.opts.projectRoot, 'platforms', 'ios')
 
     // Copy widget folder
     copyFolderRecursiveSync(
       srcFolder,
-      path.join(context.opts.projectRoot, 'platforms', 'ios', widgetName)
+      targetFolder
     );
-    log('Successfully copied Widget folder!', 'success');
+
+    var oldpath = path.join(targetFolder, 'ios')
+    var newPath = path.join(targetFolder, widgetName)
+
+    fs.renameSync(oldPath, newPath)
+
+    log('Successfully copied Widget folder into ' + newPath, 'success');
     console.log('\x1b[0m'); // reset
 
     deferral.resolve();
