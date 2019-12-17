@@ -35,9 +35,15 @@
     <hook type="after_prepare" src="hooks/fixAppEntitlements.js"/>
   </platform>
 
-  <!--
   <platform name="android">
-    <config-file target="config.xml" parent="/*">
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <service android:name="com.epam.dhl.cordova.push.DHLService">
+        <intent-filter>
+          <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+        </intent-filter>
+      </service>
+    </config-file>
+  <!--    <config-file target="config.xml" parent="/*">
       <feature name="MobileMessagingCordova">
         <param name="android-package" value="org.apache.cordova.plugin.MobileMessagingCordova"/>
       </feature>
@@ -53,10 +59,18 @@
           <action android:name="org.infobip.mobile.messaging.NOTIFICATION_TAPPED" />
         </intent-filter>
       </receiver>
-    </config-file>
+    </config-file>  -->
 
-    <framework src="libs/android/mobile-messaging-aar.gradle" custom="true" type="gradleReference" />
-    <source-file src="src/android/MobileMessagingCordova.java" target-dir="src/org/apache/cordova/plugin"/>
+    <framework src="com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"/>
+    <framework src="com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"/>
+    <preference name="RETROFIT_VERSION" default="2.6.1"/>
+    <source-file src="src/android/com/epam/dhl/cordova/push/DHLService.java" target-dir="src/com/epam/dhl/cordova/push"/>
+    <source-file src="src/android/com/epam/dhl/cordova/push/RetrofitService.java" target-dir="src/com/epam/dhl/cordova/push"/>
+    <source-file src="src/android/com/epam/dhl/cordova/push/api/DHLApi.java" target-dir="src/com/epam/dhl/cordova/push/api"/>
+    <source-file src="src/android/com/epam/dhl/cordova/push/api/ServiceBody.java" target-dir="src/com/epam/dhl/cordova/push/api"/>
+    <source-file src="src/android/com/epam/dhl/cordova/push/api/ServiceCheckResponse.java" target-dir="src/com/epam/dhl/cordova/push/api"/>
+    <source-file src="src/android/com/epam/dhl/cordova/push/api/ServiceData.java" target-dir="src/com/epam/dhl/cordova/push/api"/>
+    <source-file src="src/android/com/epam/dhl/cordova/push/api/ServiceResponse.java" target-dir="src/com/epam/dhl/cordova/push/api"/>
   </platform>
-  -->
+
 </plugin>
