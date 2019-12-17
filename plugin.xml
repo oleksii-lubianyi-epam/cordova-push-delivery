@@ -36,13 +36,7 @@
   </platform>
 
   <platform name="android">	
-	<edit-config file="AndroidManifest.xml" target="/manifest/application/service[@android:name='com.adobe.phonegap.push.FCMService']" mode="overwrite">
-      <service android:name="com.epam.dhl.cordova.push.DHLService">
-        <intent-filter>
-          <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-        </intent-filter>
-      </service>
-	</edit-config>
+	<edit-config file="AndroidManifest.xml" target="/manifest/application/service[@android:name='com.adobe.phonegap.push.FCMService']" mode="delete" />
 
     <framework src="com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"/>
     <framework src="com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"/>
