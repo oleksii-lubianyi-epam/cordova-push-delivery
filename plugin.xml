@@ -4,8 +4,8 @@
   <name>com-epam-dhl-cordova-push-delivery</name>
 
   <engines>
-    <engine name="cordova-android" version=">=4.1.0"/>
-    <engine name="cordova-ios" version=">=4.3.0"/>
+    <engine name="cordova-android" version=">=6.3.0"/>
+    <engine name="cordova-ios" version=">=4.5.0"/>
   </engines>
 
 <!--
@@ -35,31 +35,14 @@
     <hook type="after_prepare" src="hooks/fixAppEntitlements.js"/>
   </platform>
 
-  <platform name="android">
-    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+  <platform name="android">	
+	<edit-config file="AndroidManifest.xml" target="/manifest/application/service[@android:name='com.adobe.phonegap.push.FCMService']" mode="overwrite">
       <service android:name="com.epam.dhl.cordova.push.DHLService">
         <intent-filter>
           <action android:name="com.google.firebase.MESSAGING_EVENT"/>
         </intent-filter>
       </service>
-    </config-file>
-  <!--    <config-file target="config.xml" parent="/*">
-      <feature name="MobileMessagingCordova">
-        <param name="android-package" value="org.apache.cordova.plugin.MobileMessagingCordova"/>
-      </feature>
-
-      <preference name="IB_ANDROID_SUPPORT_VER_OVERRIDE" value="$ANDROID_SUPPORT_VER_OVERRIDE"/>
-      <preference name="IB_ANDROID_GMS_VER_OVERRIDE" value="$ANDROID_GMS_VER_OVERRIDE"/>
-    </config-file>
-
-    <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <receiver android:name="org.apache.cordova.plugin.MobileMessagingCordova$MessageActionReceiver" android:exported="false">
-        <intent-filter>
-          <action android:name="org.infobip.mobile.messaging.MESSAGE_RECEIVED" />
-          <action android:name="org.infobip.mobile.messaging.NOTIFICATION_TAPPED" />
-        </intent-filter>
-      </receiver>
-    </config-file>  -->
+	</edit-config>
 
     <framework src="com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"/>
     <framework src="com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"/>
