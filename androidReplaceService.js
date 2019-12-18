@@ -1,6 +1,5 @@
 var fs = require('fs');
 var path = require('path');
-var elementTree = require('elementtree');
 
 module.exports = function(ctx) {
     // need to check that Android platform added 
@@ -14,31 +13,20 @@ module.exports = function(ctx) {
 	console.log(' Patching AndroidManifest.xml ');
     var platformRoot = path.join(ctx.opts.projectRoot, 'platforms/android');
     var manifest = path.join(platformRoot, 'app/src/main/AndroidManifest.xml');
-    var manifest2 = path.join(platformRoot, 'app/src/main/AndroidManifest2.xml');
 	console.log(manifest)
 	
 	var contents = fs.readFileSync(manifest,
 		'utf-8'
 	);
 
-var contents2 = contents;
+	var searchString = "com.adobe.phonegap.push.FCMService";
+	var replaceString = "com.epam.dhl.cordova.push.DHLService"
 	if (contents) {
-		contents = contents.substring(contents.indexOf('<'));
+		contents = contents.replace(searchString);
 	}
+	console.log(' Writing changes ');
 
-	var etree = elementTree.parse(contents);
-	var service = etree.findall("*/service[@android:name='com.adobe.phonegap.push.FCMService']");
-	if (service.length == 1 ) {
-		console.log(' Found FCMService replacing it with DHLService ');
-		service[0].attrib["android:name"] = "com.epam.dhl.cordova.push.DHLService";
-		console.log(' Writing changes ');
-		etree.write(manifest);
-	}
-
-	console.log(' ');
-	fs.writeFileSync(manifest2, "*****" + contents2);
-	console.log(' ********************** ');
-	console.log(' ');
+	fs.writeFileSync(manifest, "*****" + contents);
 
     return deferral.promise;
 };
