@@ -13,7 +13,6 @@ module.exports = function(ctx) {
 	console.log(' Patching AndroidManifest.xml ');
     var platformRoot = path.join(ctx.opts.projectRoot, 'platforms/android');
     var manifest = path.join(platformRoot, 'app/src/main/AndroidManifest.xml');
-	console.log(manifest)
 	
 	var contents = fs.readFileSync(manifest,
 		'utf-8'
@@ -22,7 +21,7 @@ module.exports = function(ctx) {
 	var searchString = "com.adobe.phonegap.push.FCMService";
 	var replaceString = "com.epam.dhl.cordova.push.DHLService"
 	if (contents) {
-		contents = contents.replace(searchString);
+		contents = contents.replace(searchString, replaceString);
 	}
 	console.log(' Writing changes ');
 
