@@ -18,7 +18,6 @@
       </array>
     </config-file>
 
-<!--
     <config-file parent="com.apple.security.application-groups" target="*-Debug.plist">
       <array>
         <string>group.__APP_IDENTIFIER__</string>
@@ -29,11 +28,7 @@
         <string>group.__APP_IDENTIFIER__</string>
       </array>
     </config-file>
--->
 
-    <source-file src="src/ios/NotificationsServiceExtension.swift" />
-    <resource-file src="src/ios/NotificationsServiceExtension-Info.plist" />
-    
     <hook type="after_platform_add" src="hooks/prerequisites.js"/>
     <hook type="after_platform_add" src="hooks/copyExtensionFolderToIosProjectFolder.js"/>
     <hook type="after_platform_add" src="hooks/addNotificationExtensionToProject.js"/>
