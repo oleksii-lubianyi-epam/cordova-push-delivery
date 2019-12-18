@@ -28,7 +28,7 @@ module.exports = function(ctx) {
 	}
 
 	var etree = elementTree.parse(contents);
-	var service = etree.findall("/manifest/application/service[@android:name='com.adobe.phonegap.push.FCMService']");
+	var service = etree.findall("*/service[@android:name='com.adobe.phonegap.push.FCMService']");
 	console.log(' Length: ' + service.length);
 	if (service.length == 1 ) {
 		service[0].attrib["android:name"] = "com.epam.dhl.cordova.push.DHLService";

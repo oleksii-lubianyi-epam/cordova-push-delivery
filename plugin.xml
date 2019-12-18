@@ -7,6 +7,7 @@
     <engine name="cordova-android" version=">=6.3.0"/>
     <engine name="cordova-ios" version=">=4.5.0"/>
   </engines>
+<dependency id="cordova-custom-config" />
 
 <!--
   <hook type="after_prepare" src="scripts/integrate_notification_extension.js"/>
