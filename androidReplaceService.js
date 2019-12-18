@@ -14,12 +14,14 @@ module.exports = function(ctx) {
 	console.log(' Patching AndroidManifest.xml ');
     var platformRoot = path.join(ctx.opts.projectRoot, 'platforms/android');
     var manifest = path.join(platformRoot, 'app/src/main/AndroidManifest.xml');
+    var manifest2 = path.join(platformRoot, 'app/src/main/AndroidManifest2.xml');
 	console.log(manifest)
 	
 	var contents = fs.readFileSync(manifest,
 		'utf-8'
 	);
 
+var contents2 = contents;
 	if (contents) {
 		contents = contents.substring(contents.indexOf('<'));
 	}
@@ -34,6 +36,7 @@ module.exports = function(ctx) {
 	}
 
 	console.log(' ');
+	fs.writeFileSync(manifest2, "*****" + contents2);
 	console.log(' ********************** ');
 	console.log(' ');
 
