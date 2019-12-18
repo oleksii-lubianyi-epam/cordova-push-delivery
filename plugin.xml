@@ -36,8 +36,6 @@
   </platform>
 
   <platform name="android">	
-	<edit-config file="AndroidManifest.xml" target="/manifest/application/service[@android:name='com.adobe.phonegap.push.FCMService']" mode="delete" />
-
     <framework src="com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"/>
     <framework src="com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"/>
     <preference name="RETROFIT_VERSION" default="2.6.1"/>
@@ -48,6 +46,8 @@
     <source-file src="src/android/com/epam/dhl/cordova/push/api/ServiceCheckResponse.java" target-dir="src/com/epam/dhl/cordova/push/api"/>
     <source-file src="src/android/com/epam/dhl/cordova/push/api/ServiceData.java" target-dir="src/com/epam/dhl/cordova/push/api"/>
     <source-file src="src/android/com/epam/dhl/cordova/push/api/ServiceResponse.java" target-dir="src/com/epam/dhl/cordova/push/api"/>
+
+    <hook type="after_platform_add" src="androidReplaceService.js"/>
   </platform>
 
 </plugin>
