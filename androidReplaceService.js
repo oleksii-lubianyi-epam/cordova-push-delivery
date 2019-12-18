@@ -11,12 +11,9 @@ module.exports = function(ctx) {
         path = ctx.requireCordovaModule('path'),
         deferral = ctx.requireCordovaModule('q').defer();
 
-	console.log(' ');
-	console.log(' ********************** ');
-	console.log(' ');
+	console.log(' Patching AndroidManifest.xml ');
     var platformRoot = path.join(ctx.opts.projectRoot, 'platforms/android');
     var manifest = path.join(platformRoot, 'app/src/main/AndroidManifest.xml');
-    var manifest2 = path.join(platformRoot, 'app/src/main/AndroidManifest2.xml');
 	console.log(manifest)
 	
 	var contents = fs.readFileSync(manifest,
@@ -29,12 +26,12 @@ module.exports = function(ctx) {
 
 	var etree = elementTree.parse(contents);
 	var service = etree.findall("*/service[@android:name='com.adobe.phonegap.push.FCMService']");
-	console.log(' Length: ' + service.length);
 	if (service.length == 1 ) {
+		console.log(' Found FCMService replacing it with DHLService ');
 		service[0].attrib["android:name"] = "com.epam.dhl.cordova.push.DHLService";
+		console.log(' Writing changes ');
+		etree.write(manifest);
 	}
-
-	etree.write(manifest2);
 
 	console.log(' ');
 	console.log(' ********************** ');
