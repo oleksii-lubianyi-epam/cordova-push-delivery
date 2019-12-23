@@ -27,10 +27,12 @@ module.exports = function(ctx) {
 
 	fs.writeFileSync(manifest, contents);
 	
-	console.log(' ************* ');
+	console.log(' *****CTX***** ');
+	console.log(ctx);
+	console.log(' ****.OPTS**** ');
+	console.log(ctx.opts);
+	console.log(' ****PLUGIN*** ');
 	console.log(ctx.opts.plugin);
-	console.log(' ************* ');
-	console.log(ctx.cordova.plugins.list());
 	console.log(' ************* ');
 
 	//reading parameters from config.xml
