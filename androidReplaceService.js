@@ -28,7 +28,7 @@ module.exports = function(ctx) {
 	fs.writeFileSync(manifest, contents);
 	
 	console.log(' ************* ');
-	console.log(context.opts.plugin);
+	console.log(ctx.opts.plugin);
 	console.log(' ************* ');
 
 	//reading parameters from config.xml
