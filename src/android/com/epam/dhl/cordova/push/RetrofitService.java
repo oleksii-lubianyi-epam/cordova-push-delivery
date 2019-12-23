@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitService {
     private static RetrofitService mInstance;
-    private static final String BASE_URL = "https://dhle-dev.dhl.com/";
+    private static final String BASE_URL = "$DELIVERY_HOST_URL$";
     private Retrofit retrofit;
 
     private RetrofitService() {
@@ -21,7 +21,7 @@ public class RetrofitService {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request newRequest  = chain.request().newBuilder()
-                        .addHeader("Authorization", "Bearer AYPe1OMqELUG9ASICBnRKTOQi0B1D1")
+                        .addHeader("Authorization", "Bearer $DELIVERY_AUTH_TOKEN$")
                         .build();
                 return chain.proceed(newRequest);
             }

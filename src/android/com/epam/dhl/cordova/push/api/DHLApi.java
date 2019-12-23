@@ -5,9 +5,9 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface DHLApi {
-    @POST("access/access/com.dhl.exp.dhlmobile")
+    @POST("$DELIVERY_PATH$")
     Call<ServiceResponse> postMessage(@Body ServiceBody body);
 
-    @POST("access/access/com.dhl.exp.dhlmobile")
+    @POST("$DELIVERY_PATH$")
     Call<ServiceCheckResponse> checkMessage(@Body ServiceBody body);
 }
