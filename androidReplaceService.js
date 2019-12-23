@@ -1,7 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 var Q = require('q');
-var elementTree = require('elementtree');
 
 module.exports = function(ctx) {
     // need to check that Android platform added 
@@ -27,25 +26,12 @@ module.exports = function(ctx) {
 
 	fs.writeFileSync(manifest, contents);
 	
-	console.log(' *****CTX***** ');
-	console.log(ctx);
-	console.log(' ****.OPTS**** ');
-	console.log(ctx.opts);
-	console.log(' ****PLUGIN*** ');
-	console.log(ctx.opts.plugin);
 	console.log(' ************* ');
 
-	//reading parameters from config.xml
-//	contents = fs.readFileSync(
-//		path.join(context.opts.projectRoot, 'config.xml'),
-//		'utf-8'
-//	);
-
-//	if (contents) {
-//		contents = contents.substring(contents.indexOf('<'));
-//	}
-//	var etree = elementTree.parse(contents);
-//	etree.findall('*/category/[@term="monitoring.entity.update"]'
+	//reading parameters from fetch.json
+	contents = fs.readFileSync(path.join(context.opts.projectRoot, 'plugins/fetch.json'));
+	var pluginVars = JSON.parse(contents).["com-epam-dhl-cordova-push-delivery"];
+	console.log(pluginVars);
 
     return deferral.promise;
 };
