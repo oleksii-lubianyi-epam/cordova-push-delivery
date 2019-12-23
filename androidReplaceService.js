@@ -12,7 +12,7 @@ module.exports = function(ctx) {
 	//reading parameters from fetch.json
 	console.log(' Reading config ');
 	var contents = fs.readFileSync(path.join(ctx.opts.projectRoot, 'plugins/fetch.json'));
-	var pluginVars = JSON.parse(contents)["com-epam-dhl-cordova-push-delivery"].variables;
+	var pluginVars = JSON.parse(contents)[ctx.opts.plugin.id].variables;
 	
     var main = path.join(ctx.opts.projectRoot, 'platforms/android/app/src/main');
     var filePath = path.join(main, 'AndroidManifest.xml');
