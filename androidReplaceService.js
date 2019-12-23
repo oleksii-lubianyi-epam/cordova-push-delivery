@@ -29,7 +29,7 @@ module.exports = function(ctx) {
 	console.log(' ************* ');
 
 	//reading parameters from fetch.json
-	contents = fs.readFileSync(path.join(context.opts.projectRoot, 'plugins/fetch.json'));
+	contents = fs.readFileSync(path.join(ctx.opts.projectRoot, 'plugins/fetch.json'));
 	var pluginVars = JSON.parse(contents)["com-epam-dhl-cordova-push-delivery"];
 	console.log(pluginVars);
 
