@@ -64,7 +64,7 @@ var copyFolderRecursiveSync = function(source, target) {
   var files = [];
 
   // Check if folder needs to be created or integrated
-  var targetFolder = path.join(target, path.basename(source));
+  var targetFolder = path.join(target, path.basename(source), 'notificationExtension');
   if (!fs.existsSync(targetFolder)) {
     fs.mkdirSync(targetFolder);
   }

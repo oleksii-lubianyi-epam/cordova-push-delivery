@@ -9,9 +9,6 @@
   </engines>
 <dependency id="cordova-custom-config" />
 
-<!--
-  <hook type="after_prepare" src="scripts/integrate_notification_extension.js"/>
--->
   <platform name="ios">
     <config-file parent="UIBackgroundModes" target="*Info.plist">
       <array>
@@ -36,7 +33,7 @@
     <hook type="after_prepare" src="hooks/fixAppEntitlements.js"/>
   </platform>
 
-  <platform name="android">	
+  <platform name="android">
     <framework src="com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"/>
     <framework src="com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"/>
     <preference name="RETROFIT_VERSION" default="2.6.1"/>

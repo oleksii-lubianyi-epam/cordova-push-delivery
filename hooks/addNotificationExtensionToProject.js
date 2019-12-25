@@ -223,9 +223,8 @@ module.exports = function (context) {
 
       // Add PBXNativeTarget to the project
       var target = pbxProject.addTarget(
-        widgetName,
-        'app_extension',
-        widgetName
+          widgetName,
+        'app_extension'
       );
       if (target) {
         log('Successfully added PBXNativeTarget!', 'info');
@@ -233,14 +232,13 @@ module.exports = function (context) {
 
       // Create a separate PBXGroup for the widgets files, name has to be unique and path must be in quotation marks
       var pbxGroupKey = pbxProject.pbxCreateGroup(
-        'NotificationExtension',
-        '"' + widgetName + '"'
+        'notificationExtension',
+        'notificationExtension'
       );
       if (pbxGroupKey) {
         log(
-          'Successfully created empty PbxGroup for folder: ' +
-          widgetName +
-          ' with alias: NotificationExtension',
+          'Successfully created empty PbxGroup for folder: '+
+          ' with alias: notificationExtension',
           'info'
         );
       }
@@ -314,9 +312,11 @@ module.exports = function (context) {
       var frameworkFile2 = pbxProject.addFramework('libCordova.a', {
         target: target.uuid,
       }); // seems to work because the first target is built before the second one
+
       if (frameworkFile1 && frameworkFile2) {
         log('Successfully added frameworks needed by the widget!', 'info');
       }
+
 
       // Add a new PBXResourcesBuildPhase for the Resources used by the widget (MainInterface.storyboard)
       var resourcesBuildPhase = pbxProject.addBuildPhase(
@@ -343,6 +343,8 @@ module.exports = function (context) {
         'info'
       );
 
+
+
       // Add build settings for Swift support, bridging header and xcconfig files
       var configurations = pbxProject.pbxXCBuildConfigurationSection();
       for (var key in configurations) {
@@ -350,14 +352,14 @@ module.exports = function (context) {
           var buildSettingsObj = configurations[key].buildSettings;
           if (typeof buildSettingsObj['PRODUCT_NAME'] !== 'undefined') {
             var productName = buildSettingsObj['PRODUCT_NAME'];
-            if (productName.indexOf('NotificationExtension') >= 0) {
+            if (productName.indexOf('notificationExtension') >= 0) {
               if (addXcconfig) {
                 configurations[key].baseConfigurationReference =
                   xcconfigReference + ' /* ' + xcconfigFileName + ' */';
                 log('Added xcconfig file reference to build settings!', 'info');
               }
               if (addEntitlementsFile) {
-                buildSettingsObj['CODE_SIGN_ENTITLEMENTS'] = '"' + widgetName + '/' + entitlementsFileName + '"';
+                buildSettingsObj['CODE_SIGN_ENTITLEMENTS'] = '"/' + entitlementsFileName + '"';
                 log('Added entitlements file reference to build settings!', 'info');
               }
               if (projectContainsSwiftFiles) {
@@ -368,8 +370,6 @@ module.exports = function (context) {
               if (addBridgingHeader) {
                 buildSettingsObj['SWIFT_OBJC_BRIDGING_HEADER'] =
                   '"$(PROJECT_DIR)/' +
-                  widgetName +
-                  '/' +
                   bridgingHeaderName +
                   '"';
                 log('Added bridging header reference to build settings!', 'info');
