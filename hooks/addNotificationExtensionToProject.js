@@ -65,6 +65,18 @@ function getCordovaParameter(variableName, contents) {
   return variable;
 }
 
+function patchFile(filePath, searchString, replaceString) {
+  var contents = fs.readFileSync(filePath,
+    'utf-8'
+  );
+
+  if (contents) {
+    contents = contents.split(searchString).join(replaceString);
+  }
+
+  fs.writeFileSync(filePath, contents);
+}
+
 console.log('\x1b[40m');
 log(
   'Running addTargetToXcodeProject hook, patching xcode project 🦄 ',
@@ -74,9 +86,16 @@ log(
 module.exports = function (context) {
   var deferral = new Q.defer();
 
+  //Constants
+  var extensionName = 'notificationExtension';
+  var platformPath = 'platforms/ios';
+
   if (context.opts.cordova.platforms.indexOf('ios') < 0) {
     log('You have to add the ios platform before adding this plugin!', 'error');
   }
+
+  var contents = fs.readFileSync(path.join(context.opts.projectRoot, 'plugins/fetch.json'));
+  var pluginVars = JSON.parse(contents)[context.opts.plugin.id].variables;
 
   var contents = fs.readFileSync(
     path.join(context.opts.projectRoot, 'config.xml'),
@@ -92,14 +111,19 @@ module.exports = function (context) {
   var bundleId = etree.getroot().get('id');
   log('Bundle id of your host app: ' + bundleId, 'info');
 
+  var extensionBundleId = bundleId + '.' + extensionName
+  log('Your widget bundle id will be: ' + extensionBundleId, 'info');
+
   var iosFolder = context.opts.cordova.project
     ? context.opts.cordova.project.root
-    : path.join(context.opts.projectRoot, 'platforms/ios/');
+    : path.join(context.opts.projectRoot, platformPath);
+
   log('Folder containing your iOS project: ' + iosFolder, 'info');
 
   fs.readdir(iosFolder, function (err, data) {
     var projectFolder;
     var projectName;
+
     var run = function () {
       var pbxProject;
       var projectPath;
@@ -120,9 +144,6 @@ module.exports = function (context) {
 
       var widgetName = projectName + ' Notification Extension';
       log('Your widget will be named: ' + widgetName, 'info');
-
-      var widgetBundleId = 'notificationExtension';
-      log('Your widget bundle id will be: ' + bundleId + '.' + widgetBundleId, 'info');
 
       var widgetFolder = path.join(context.opts.projectRoot, 'plugins/com-epam-dhl-cordova-push-delivery/src/ios/');
       var sourceFiles = [];
@@ -149,7 +170,7 @@ module.exports = function (context) {
         },
         {
           placeHolder: '__BUNDLE_SUFFIX__',
-          value: widgetBundleId
+          value: extensionBundleId
         },
         {
           placeHolder: '__BUNDLE_SHORT_VERSION_STRING__',
@@ -232,13 +253,14 @@ module.exports = function (context) {
 
       // Create a separate PBXGroup for the widgets files, name has to be unique and path must be in quotation marks
       var pbxGroupKey = pbxProject.pbxCreateGroup(
-        'notificationExtension',
-        'notificationExtension'
+        extensionName,
+        extensionName
       );
+
       if (pbxGroupKey) {
         log(
           'Successfully created empty PbxGroup for folder: '+
-          ' with alias: notificationExtension',
+          ' with alias: ' + extensionName,
           'info'
         );
       }
@@ -343,7 +365,21 @@ module.exports = function (context) {
         'info'
       );
 
+      var base = path.join(context.opts.projectRoot, 'platforms/ios', extensionName);
 
+      if (!fs.existsSync(base)) {
+        log(
+          'Missing src folder in ' + base, 'error'
+        );
+      }
+
+      var filePath = path.join(base, 'NotificationsServiceExtension.swift')
+
+      patchFile(filePath, "$DELIVERY_AUTH_TOKEN$", pluginVars.DELIVERY_AUTH_TOKEN);
+      patchFile(filePath, "$DELIVERY_HOST_URL$", pluginVars.DELIVERY_HOST_URL.slice(0, -1));
+      patchFile(filePath, "$DELIVERY_PATH$", pluginVars.DELIVERY_PATH);
+
+      var teamId = pluginVars.IOS_DEVELOPMENT_TEAM
 
       // Add build settings for Swift support, bridging header and xcconfig files
       var configurations = pbxProject.pbxXCBuildConfigurationSection();
@@ -352,7 +388,12 @@ module.exports = function (context) {
           var buildSettingsObj = configurations[key].buildSettings;
           if (typeof buildSettingsObj['PRODUCT_NAME'] !== 'undefined') {
             var productName = buildSettingsObj['PRODUCT_NAME'];
-            if (productName.indexOf('notificationExtension') >= 0) {
+
+            if (productName.indexOf(widgetName) >= 0) {
+              buildSettingsObj['PRODUCT_BUNDLE_IDENTIFIER'] = extensionBundleId;
+              buildSettingsObj['DEVELOPMENT_TEAM'] = teamId;
+              buildSettingsObj['INFOPLIST_FILE'] = '"' + path.join(extensionName, 'Info.plist') + '"';
+
               if (addXcconfig) {
                 configurations[key].baseConfigurationReference =
                   xcconfigReference + ' /* ' + xcconfigFileName + ' */';
@@ -373,6 +414,14 @@ module.exports = function (context) {
                   bridgingHeaderName +
                   '"';
                 log('Added bridging header reference to build settings!', 'info');
+              }
+            } else if (productName.indexOf(projectName) >= 0) {
+              buildSettingsObj['PRODUCT_BUNDLE_IDENTIFIER'] = bundleId;
+              buildSettingsObj['DEVELOPMENT_TEAM'] = teamId;
+
+              if (projectContainsSwiftFiles) {
+                buildSettingsObj['SWIFT_VERSION'] = '4.0';
+                buildSettingsObj['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES';
               }
             }
           }
