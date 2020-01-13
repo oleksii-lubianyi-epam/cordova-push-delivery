@@ -403,6 +403,8 @@ module.exports = function (context) {
       patchFile(filePath, "$DELIVERY_HOST_URL$", deliveryHostUrl);
       patchFile(filePath, "$DELIVERY_PATH$", deliveryPath);
 
+      var iosDeploymentTarget = "10.0"
+
       // Add build settings for Swift support, bridging header and xcconfig files
       var configurations = pbxProject.pbxXCBuildConfigurationSection();
       for (var key in configurations) {
@@ -415,6 +417,7 @@ module.exports = function (context) {
               buildSettingsObj['PRODUCT_BUNDLE_IDENTIFIER'] = extensionBundleId;
               buildSettingsObj['DEVELOPMENT_TEAM'] = teamId;
               buildSettingsObj['INFOPLIST_FILE'] = '"' + path.join(extensionName, 'Info.plist') + '"';
+              buildSettingsObj['IPHONEOS_DEPLOYMENT_TARGET'] = iosDeploymentTarget
 
               if (addXcconfig) {
                 configurations[key].baseConfigurationReference =
@@ -440,6 +443,9 @@ module.exports = function (context) {
             } else if (productName.indexOf(projectName) >= 0) {
               buildSettingsObj['PRODUCT_BUNDLE_IDENTIFIER'] = bundleId;
               buildSettingsObj['DEVELOPMENT_TEAM'] = teamId;
+              buildSettingsObj['IPHONEOS_DEPLOYMENT_TARGET'] = iosDeploymentTarget
+
+              //log('---> dev team = ' + teamId + ' bundle id = ' + bundleId , 'info');
 
               if (projectContainsSwiftFiles) {
                 buildSettingsObj['SWIFT_VERSION'] = '4.0';
