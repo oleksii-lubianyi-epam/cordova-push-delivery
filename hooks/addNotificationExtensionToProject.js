@@ -440,7 +440,6 @@ module.exports = function (context) {
             } else if (productName.indexOf(projectName) >= 0) {
               buildSettingsObj['PRODUCT_BUNDLE_IDENTIFIER'] = bundleId;
               buildSettingsObj['DEVELOPMENT_TEAM'] = teamId;
-              log('---> dev team = ' +teamId+ ' bundle id = ' + bundleId , 'info');
 
               if (projectContainsSwiftFiles) {
                 buildSettingsObj['SWIFT_VERSION'] = '4.0';
