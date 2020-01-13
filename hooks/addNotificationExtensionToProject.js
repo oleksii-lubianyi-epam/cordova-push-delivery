@@ -77,6 +77,10 @@ function patchFile(filePath, searchString, replaceString) {
   fs.writeFileSync(filePath, contents);
 }
 
+function isEmpty(str) {
+   return (typeof str === "undefined" || str === null || str ===  "");
+}
+
 console.log('\x1b[40m');
 log(
   'Running addTargetToXcodeProject hook, patching xcode project 🦄 ',
@@ -96,6 +100,26 @@ module.exports = function (context) {
 
   var contents = fs.readFileSync(path.join(context.opts.projectRoot, 'plugins/fetch.json'));
   var pluginVars = JSON.parse(contents)[context.opts.plugin.id].variables;
+
+  var deliveryAuthToken = pluginVars.DELIVERY_AUTH_TOKEN;
+  var deliveryHostUrl = pluginVars.DELIVERY_HOST_URL.slice(0, -1);
+  var deliveryPath = pluginVars.DELIVERY_PATH;
+  var teamId = pluginVars.IOS_DEVELOPMENT_TEAM;
+
+  if (isEmpty(deliveryAuthToken)
+    || isEmpty(deliveryHostUrl)
+    || isEmpty(deliveryPath)
+    || isEmpty(teamId)) {
+
+    log(
+      'You got an error, during the plugin installation. Installation command must match an example: ' +
+      'cordova plugin add https://github.com/oleksii-lubianyi-epam/cordova-push-delivery.git --save' +
+      ' --variable DELIVERY_HOST_URL="$URL$"' +
+      ' --variable DELIVERY_PATH="$Path$"' +
+      ' --variable DELIVERY_AUTH_TOKEN="$Token$"' +
+      ' --variable IOS_DEVELOPMENT_TEAM="$TeamId$"',
+      'error');
+  }
 
   var contents = fs.readFileSync(
     path.join(context.opts.projectRoot, 'config.xml'),
@@ -375,11 +399,9 @@ module.exports = function (context) {
 
       var filePath = path.join(base, 'NotificationsServiceExtension.swift')
 
-      patchFile(filePath, "$DELIVERY_AUTH_TOKEN$", pluginVars.DELIVERY_AUTH_TOKEN);
-      patchFile(filePath, "$DELIVERY_HOST_URL$", pluginVars.DELIVERY_HOST_URL.slice(0, -1));
-      patchFile(filePath, "$DELIVERY_PATH$", pluginVars.DELIVERY_PATH);
-
-      var teamId = pluginVars.IOS_DEVELOPMENT_TEAM
+      patchFile(filePath, "$DELIVERY_AUTH_TOKEN$", deliveryAuthToken);
+      patchFile(filePath, "$DELIVERY_HOST_URL$", deliveryHostUrl);
+      patchFile(filePath, "$DELIVERY_PATH$", deliveryPath);
 
       // Add build settings for Swift support, bridging header and xcconfig files
       var configurations = pbxProject.pbxXCBuildConfigurationSection();
