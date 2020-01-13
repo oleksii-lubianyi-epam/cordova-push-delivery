@@ -399,7 +399,7 @@ module.exports = function (context) {
 
       var filePath = path.join(base, 'NotificationsServiceExtension.swift')
 
-      patchFile(filePath, "$DELIVERY_AUTH_TOKEN$", deliveryAuthToken;
+      patchFile(filePath, "$DELIVERY_AUTH_TOKEN$", deliveryAuthToken);
       patchFile(filePath, "$DELIVERY_HOST_URL$", deliveryHostUrl);
       patchFile(filePath, "$DELIVERY_PATH$", deliveryPath);
 
