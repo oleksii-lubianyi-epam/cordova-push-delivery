@@ -4,9 +4,6 @@ var Q = require('q');
 
 module.exports = function(ctx) {
     // need to check that Android platform added 
-    if (ctx.opts.platforms.indexOf('android') < 0) {
-        return;
-    }
     var deferral = new Q.defer();
 
 	//reading parameters from fetch.json
