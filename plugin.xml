@@ -34,6 +34,7 @@
   </platform>
 
   <platform name="android">
+    <dependency id="phonegap-plugin-push" version=">=2.0.0" />
     <framework src="com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"/>
     <framework src="com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"/>
     <preference name="RETROFIT_VERSION" default="2.6.1"/>
@@ -45,7 +46,7 @@
     <source-file src="src/android/com/epam/dhl/cordova/push/api/ServiceData.java" target-dir="src/com/epam/dhl/cordova/push/api"/>
     <source-file src="src/android/com/epam/dhl/cordova/push/api/ServiceResponse.java" target-dir="src/com/epam/dhl/cordova/push/api"/>
 
-    <hook type="after_platform_add" src="androidReplaceService.js"/>
+    <hook type="after_plugin_install" src="androidReplaceService.js"/>
   </platform>
 
 </plugin>
