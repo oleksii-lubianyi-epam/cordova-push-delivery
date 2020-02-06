@@ -10,15 +10,15 @@ module.exports = function(ctx) {
     var contents = fs.readFileSync(path.join(ctx.opts.projectRoot, 'plugins/fetch.json'));
     var pluginVars = JSON.parse(contents)[ctx.opts.plugin.id].variables;
     
-    var main = path.join(ctx.opts.projectRoot, 'platforms/android');
+    var main = path.join(ctx.opts.projectRoot, 'platforms/android/app/src/main');
     var filePath = path.join(main, 'AndroidManifest.xml');
     patchFile(filePath, "com.adobe.phonegap.push.FCMService", "com.epam.dhl.cordova.push.DHLService");
 
-    filePath = path.join(main, 'src/com/epam/dhl/cordova/push/RetrofitService.java');
+    filePath = path.join(main, 'java/com/epam/dhl/cordova/push/RetrofitService.java');
     patchFile(filePath, "$DELIVERY_AUTH_TOKEN$", pluginVars.DELIVERY_AUTH_TOKEN);
     patchFile(filePath, "$DELIVERY_HOST_URL$", pluginVars.DELIVERY_HOST_URL);
 
-    filePath = path.join(main, 'src/com/epam/dhl/cordova/push/api/DHLApi.java');
+    filePath = path.join(main, 'java/com/epam/dhl/cordova/push/api/DHLApi.java');
     patchFile(filePath, "$DELIVERY_PATH$", pluginVars.DELIVERY_PATH);
 
     return deferral.promise;
