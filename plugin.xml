@@ -27,10 +27,10 @@
       </array>
     </config-file>
 
-    <hook type="after_plugin_install" src="hooks/fixAppEntitlements.js"/>
     <hook type="after_plugin_install" src="hooks/prerequisites.js" />
     <hook type="after_plugin_install" src="hooks/copyExtensionFolderToIosProjectFolder.js" />
     <hook type="after_plugin_install" src="hooks/addNotificationExtensionToProject.js" />
+    <hook type="after_prepare" src="hooks/fixAppEntitlements.js"/>
   </platform>
 
   <platform name="android">
