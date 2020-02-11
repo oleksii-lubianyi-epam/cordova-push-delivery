@@ -11,10 +11,27 @@ module.exports = function(ctx) {
     var pluginVars = JSON.parse(contents)[ctx.opts.plugin.id].variables;
     
     var main = path.join(ctx.opts.projectRoot, 'platforms/android/app/src/main');
+	if (!fs.existsSync(main)) {
+		console.log(' ******no main****** ');
+		console.log(main);
+		main = path.join(ctx.opts.projectRoot, 'platforms/android');
+	}
+	if (!fs.existsSync(main)) {
+		console.log(' ******no main****** ');
+		console.log(main);
+	}
     var filePath = path.join(main, 'AndroidManifest.xml');
     patchFile(filePath, "com.adobe.phonegap.push.FCMService", "com.epam.dhl.cordova.push.DHLService");
 
-    filePath = path.join(main, 'java/com/epam/dhl/cordova/push/RetrofitService.java');
+	var folderName;
+    if (fs.existsSync(path.join(main, 'java'))) {
+		console.log(' ******java****** ');
+		folderName = 'java';
+	} else if (fs.existsSync(path.join(main, 'src'))){
+		console.log(' ******src****** ');
+		folderName = 'src';
+	}
+	filePath = path.join(main, 'java/com/epam/dhl/cordova/push/RetrofitService.java');
     patchFile(filePath, "$DELIVERY_AUTH_TOKEN$", pluginVars.DELIVERY_AUTH_TOKEN);
     patchFile(filePath, "$DELIVERY_HOST_URL$", pluginVars.DELIVERY_HOST_URL);
 
