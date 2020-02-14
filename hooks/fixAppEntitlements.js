@@ -106,6 +106,45 @@ module.exports = function (context) {
       deferral.resolve();
     };
 
+    var changeExtensionBundleId = function () {
+      var pbxProject;
+      var widgetName = projectName + ' Notification Extension';
+      var extensionBundleId = bundleId + '.notificationExtension';
+      var projectPath = path.join(projectFolder, 'project.pbxproj');
+
+      if (context.opts.cordova.project) {
+        pbxProject = context.opts.cordova.project.parseProjectFile(
+          context.opts.projectRoot
+        ).xcode;
+      } else {
+        pbxProject = xcode.project(projectPath);
+        pbxProject.parseSync();
+      }
+
+      var configurations = pbxProject.pbxXCBuildConfigurationSection();
+      for (var key in configurations) {
+        if (typeof configurations[key].buildSettings !== 'undefined') {
+          var buildSettingsObj = configurations[key].buildSettings;
+          if (typeof buildSettingsObj['PRODUCT_NAME'] !== 'undefined') {
+            var productName = buildSettingsObj['PRODUCT_NAME'];
+
+            if (productName.indexOf(widgetName) >= 0) {
+              buildSettingsObj['PRODUCT_BUNDLE_IDENTIFIER'] = extensionBundleId;
+            }
+          }
+        }
+      }
+
+      // Write the modified project back to disc
+      log('Writing the modified project back to disk ...', 'info');
+      fs.writeFileSync(projectPath, pbxProject.writeSync());
+      log('Successfully changed extension bundleId!', 'success');
+
+      console.log('\x1b[0m'); // reset
+
+      deferral.resolve();
+    };
+
     if (err) {
       log(err, 'error');
     }
@@ -125,6 +164,7 @@ module.exports = function (context) {
     }
 
     run();
+    changeExtensionBundleId();
   });
 
   return deferral.promise;
