@@ -64,11 +64,11 @@ var copyFileSync = function(source, target) {
 var copyFolderRecursiveSync = function(source, target, folderName) {
   var files = [];
 
-log('---> target: ' + target, 'success');
-log('---> path.basename(source): ' + path.basename(source), 'success');
-log('---> folderName: ' + folderName, 'success');
+// log('---> target: ' + target, 'success');
+// log('---> path.basename(source): ' + path.basename(source), 'success');
+// log('---> folderName: ' + folderName, 'success');
   // Check if folder needs to be created or integrated
-  var targetFolder = path.join(target, path.basename(source), folderName);
+  var targetFolder = path.join(target, folderName);
   log('---> targetFolder: ' + targetFolder, 'success');
 
   if (!fs.existsSync(targetFolder)) {
