@@ -64,9 +64,6 @@ var copyFileSync = function(source, target) {
 var copyFolderRecursiveSync = function(source, target, folderName) {
   var files = [];
 
-// log('---> target: ' + target, 'success');
-// log('---> path.basename(source): ' + path.basename(source), 'success');
-// log('---> folderName: ' + folderName, 'success');
   // Check if folder needs to be created or integrated
   var targetFolder = path.join(target, folderName);
   log('---> targetFolder: ' + targetFolder, 'success');
@@ -137,8 +134,6 @@ module.exports = function(context) {
       'plugins/com-epam-dhl-cordova-push-delivery/src/ios/ext/'
     );
 
-    log('---> extFolder: ' + extFolder, 'success');
-
     if (!fs.existsSync(extFolder)) {
       log(
         'Missing widget folder in ' + extFolder + '. Should have the same name as your widget: ' + widgetName,
@@ -157,17 +152,12 @@ module.exports = function(context) {
 
     deferral.resolve();
 
-
-
-
-
-
+    // AppDelegate files substitution
     appDelegateFolder = path.join(
       context.opts.projectRoot,
       'plugins/com-epam-dhl-cordova-push-delivery/src/ios/appDelegate/'
     );
 
-    // Copy widget folder
     copyFolderRecursiveSync(
       appDelegateFolder,
       path.join(context.opts.projectRoot, 'platforms/ios'),
