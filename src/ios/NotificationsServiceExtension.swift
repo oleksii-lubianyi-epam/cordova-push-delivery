@@ -20,9 +20,10 @@ class NotificationService: UNNotificationServiceExtension {
         self.contentHandler = contentHandler
         self.bestAttemptContent = request.content
 
-        if let messageId = self.bestAttemptContent.userInfo["gcm.message_id"] as? String {
-            let jsonString = self.generateJSON(with: messageId)
-            self.sendRequest(with: jsonString)
+        if let messageId = self.bestAttemptContent.userInfo["gcm.message_id"] as? String,
+            let deviceId = UIDevice.current.identifierForVendor?.description {
+                let jsonString = self.generateJSON(messageId: messageId, deviceId: deviceId)
+                self.sendRequest(with: jsonString)
         }
 
         contentHandler(self.bestAttemptContent)
@@ -32,14 +33,15 @@ class NotificationService: UNNotificationServiceExtension {
         contentHandler?(self.bestAttemptContent)
     }
 
-    private func generateJSON(with messageId: String) -> String {
-
+    private func generateJSON(messageId: String, deviceId: String) -> String {
+        
         let json = """
         {
             "service": "push",
             "method": "acknowldge",
             "data": {
-                "messageId": "\(messageId)"
+                "messageId": "\(messageId)",
+                "deviceId": "\(deviceId)"
             }
         }
         """
