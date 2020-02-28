@@ -64,6 +64,9 @@ var copyFileSync = function(source, target) {
 var copyFolderRecursiveSync = function(source, target, folderName) {
   var files = [];
 
+log('---> target: ' + target, 'success');
+log('---> path.basename(source): ' + path.basename(source), 'success');
+log('---> folderName: ' + folderName, 'success');
   // Check if folder needs to be created or integrated
   var targetFolder = path.join(target, path.basename(source), folderName);
   log('---> targetFolder: ' + targetFolder, 'success');
@@ -128,8 +131,6 @@ module.exports = function(context) {
     }
 
     var widgetName = projectName + ' Notification Extension';
-
-    log('---> widgetName: ' + widgetName, 'success');
 
     extFolder = path.join(
       context.opts.projectRoot,
