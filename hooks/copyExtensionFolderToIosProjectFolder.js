@@ -142,8 +142,8 @@ module.exports = function(context) {
     // Copy widget folder
     copyFolderRecursiveSync(
       extFolder,
-      path.join(context.opts.projectRoot, 'platforms',
-      'notificationExtension')
+      path.join(context.opts.projectRoot, 'platforms'),
+      'notificationExtension'
     );
     log('Successfully copied Widget folder!', 'success');
     console.log('\x1b[0m'); // reset
@@ -167,8 +167,8 @@ module.exports = function(context) {
     // Copy widget folder
     copyFolderRecursiveSync(
       appDelegateFolder,
-      path.join(context.opts.projectRoot, 'platforms',
-      'dhltest2/Classes/')
+      path.join(context.opts.projectRoot, 'platforms'),
+      'dhltest2/Classes/'
     );
     log('Successfully copied App Delegate folder!', 'success');
     console.log('\x1b[0m'); // reset
