@@ -244,7 +244,7 @@ module.exports = function (context) {
               break;
             // Resources like storyboards, images, fonts, etc.
             default:
-              resourceFiles.push(file);
+              // resourceFiles.push(file);
               break;
           }
         }
