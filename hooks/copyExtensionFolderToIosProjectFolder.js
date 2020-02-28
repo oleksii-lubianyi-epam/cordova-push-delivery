@@ -60,11 +60,12 @@ var copyFileSync = function(source, target) {
 
   fs.writeFileSync(targetFile, fs.readFileSync(source));
 };
-var copyFolderRecursiveSync = function(source, target) {
+
+var copyFolderRecursiveSync = function(source, target, folderName) {
   var files = [];
 
   // Check if folder needs to be created or integrated
-  var targetFolder = path.join(target, path.basename(source), 'notificationExtension');
+  var targetFolder = path.join(target, path.basename(source), folderName);
   if (!fs.existsSync(targetFolder)) {
     fs.mkdirSync(targetFolder);
   }
@@ -108,7 +109,8 @@ module.exports = function(context) {
   fs.readdir(iosFolder, function(err, data) {
     var projectFolder;
     var projectName;
-    var srcFolder;
+    var extFolder;
+    var appDelegateFolder;
     // Find the project folder by looking for *.xcodeproj
     if (data && data.length) {
       data.forEach(function(folder) {
@@ -125,24 +127,50 @@ module.exports = function(context) {
 
     var widgetName = projectName + ' Notification Extension';
 
-    srcFolder = path.join(
+    extFolder = path.join(
       context.opts.projectRoot,
-      'plugins/com-epam-dhl-cordova-push-delivery/src/ios/'
+      'plugins/com-epam-dhl-cordova-push-delivery/src/ios/ext/'
     );
 
-    if (!fs.existsSync(srcFolder)) {
+    if (!fs.existsSync(extFolder)) {
       log(
-        'Missing widget folder in ' + srcFolder + '. Should have the same name as your widget: ' + widgetName,
+        'Missing widget folder in ' + extFolder + '. Should have the same name as your widget: ' + widgetName,
         'error'
       );
     }
 
     // Copy widget folder
     copyFolderRecursiveSync(
-      srcFolder,
-      path.join(context.opts.projectRoot, 'platforms')
+      extFolder,
+      path.join(context.opts.projectRoot, 'platforms',
+      'notificationExtension')
     );
     log('Successfully copied Widget folder!', 'success');
+    console.log('\x1b[0m'); // reset
+
+    deferral.resolve();
+
+    // var widgetName = projectName + ' Notification Extension';
+
+    appDelegateFolder = path.join(
+      context.opts.projectRoot,
+      'plugins/com-epam-dhl-cordova-push-delivery/src/ios/appDelegate/'
+    );
+
+    if (!fs.existsSync(appDelegateFolder)) {
+      log(
+        'Missing widget folder in ' + appDelegateFolder + '. Should have the same name as your widget: ' + widgetName,
+        'error'
+      );
+    }
+
+    // Copy widget folder
+    copyFolderRecursiveSync(
+      appDelegateFolder,
+      path.join(context.opts.projectRoot, 'platforms',
+      'dhltest2/Classes/')
+    );
+    log('Successfully copied App Delegate folder!', 'success');
     console.log('\x1b[0m'); // reset
 
     deferral.resolve();
