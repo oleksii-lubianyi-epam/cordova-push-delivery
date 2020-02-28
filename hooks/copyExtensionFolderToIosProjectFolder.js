@@ -66,6 +66,8 @@ var copyFolderRecursiveSync = function(source, target, folderName) {
 
   // Check if folder needs to be created or integrated
   var targetFolder = path.join(target, path.basename(source), folderName);
+  log('---> extFolder: ' + extFolder, 'success');
+  
   if (!fs.existsSync(targetFolder)) {
     fs.mkdirSync(targetFolder);
   }
@@ -127,10 +129,14 @@ module.exports = function(context) {
 
     var widgetName = projectName + ' Notification Extension';
 
+    log('---> widgetName: ' + widgetName, 'success');
+
     extFolder = path.join(
       context.opts.projectRoot,
       'plugins/com-epam-dhl-cordova-push-delivery/src/ios/ext/'
     );
+
+    log('---> extFolder: ' + extFolder, 'success');
 
     if (!fs.existsSync(extFolder)) {
       log(
@@ -150,19 +156,15 @@ module.exports = function(context) {
 
     deferral.resolve();
 
-    // var widgetName = projectName + ' Notification Extension';
+
+
+
+
 
     appDelegateFolder = path.join(
       context.opts.projectRoot,
       'plugins/com-epam-dhl-cordova-push-delivery/src/ios/appDelegate/'
     );
-
-    if (!fs.existsSync(appDelegateFolder)) {
-      log(
-        'Missing widget folder in ' + appDelegateFolder + '. Should have the same name as your widget: ' + widgetName,
-        'error'
-      );
-    }
 
     // Copy widget folder
     copyFolderRecursiveSync(
