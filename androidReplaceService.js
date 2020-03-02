@@ -34,6 +34,10 @@ module.exports = function(ctx) {
     patchFile(filePath, "$DELIVERY_AUTH_TOKEN$", pluginVars.DELIVERY_AUTH_TOKEN);
     patchFile(filePath, "$DELIVERY_HOST_URL$", pluginVars.DELIVERY_HOST_URL);
 
+    filePath = path.join(main, folderName + '/com/epam/dhl/cordova/push/DHLService.java');
+    patchFile(filePath, "$SERVICE_NAME$", pluginVars.SERVICE_NAME);
+    patchFile(filePath, "$METHOD_NAME$", pluginVars.METHOD_NAME);
+
     filePath = path.join(main, folderName + '/com/epam/dhl/cordova/push/api/DHLApi.java');
     patchFile(filePath, "$DELIVERY_PATH$", pluginVars.DELIVERY_PATH);
 

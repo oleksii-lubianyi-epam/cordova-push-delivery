@@ -29,8 +29,8 @@ public class DHLService extends FCMService {
 
     private ServiceBody createPostMessage(String id) {
         ServiceBody body = new ServiceBody();
-        body.setService("push");
-        body.setMethod("acknowldge");
+        body.setService("$SERVICE_NAME$");
+        body.setMethod("$METHOD_NAME$");
         ServiceData data = new ServiceData();
         data.setMessageId(id);
 		data.setDeviceId(getUuid());
