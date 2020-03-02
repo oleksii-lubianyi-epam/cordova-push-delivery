@@ -105,11 +105,15 @@ module.exports = function (context) {
   var deliveryHostUrl = pluginVars.DELIVERY_HOST_URL.slice(0, -1);
   var deliveryPath = pluginVars.DELIVERY_PATH;
   var teamId = pluginVars.IOS_DEVELOPMENT_TEAM;
+  var serviceName = pluginVars.SERVICE_NAME;
+  var methodName = pluginVars.METHOD_NAME;
 
   if (isEmpty(deliveryAuthToken)
     || isEmpty(deliveryHostUrl)
     || isEmpty(deliveryPath)
-    || isEmpty(teamId)) {
+    || isEmpty(teamId)
+    || isEmpty(serviceName)
+    || isEmpty(methodName)) {
 
     log(
       'You got an error, during the plugin installation. Installation command must match an example: ' +
@@ -117,7 +121,9 @@ module.exports = function (context) {
       ' --variable DELIVERY_HOST_URL="$URL$"' +
       ' --variable DELIVERY_PATH="$Path$"' +
       ' --variable DELIVERY_AUTH_TOKEN="$Token$"' +
-      ' --variable IOS_DEVELOPMENT_TEAM="$TeamId$"',
+      ' --variable IOS_DEVELOPMENT_TEAM="$TeamId$"' +
+      ' --variable SERVICE_NAME="$serviceName$"' +
+      ' --variable METHOD_NAME="$methodName$"',
       'error');
   }
 
@@ -402,6 +408,8 @@ module.exports = function (context) {
       patchFile(filePath, "$DELIVERY_AUTH_TOKEN$", deliveryAuthToken);
       patchFile(filePath, "$DELIVERY_HOST_URL$", deliveryHostUrl);
       patchFile(filePath, "$DELIVERY_PATH$", deliveryPath);
+      patchFile(filePath, "$SERVICE_NAME$", serviceName);
+      patchFile(filePath, "$METHOD_NAME$", methodName);
 
       var iosDeploymentTarget = "10.0"
 
