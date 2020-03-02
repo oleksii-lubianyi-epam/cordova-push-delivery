@@ -161,7 +161,7 @@ module.exports = function(context) {
     copyFolderRecursiveSync(
       appDelegateFolder,
       path.join(context.opts.projectRoot, 'platforms/ios'),
-      'dhltest2/Classes/'
+      path.join(projectName, 'Classes')
     );
     log('Successfully copied App Delegate folder!', 'success');
     console.log('\x1b[0m'); // reset
