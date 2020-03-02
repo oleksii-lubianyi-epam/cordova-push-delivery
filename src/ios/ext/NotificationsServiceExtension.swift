@@ -37,8 +37,8 @@ class NotificationService: UNNotificationServiceExtension {
         
         let json = """
         {
-            "service": "push",
-            "method": "acknowldge",
+            "service": "$SERVICE_NAME$",
+            "method": "$METHOD_NAME$",
             "data": {
                 "messageId": "\(messageId)",
                 "deviceId": "\(deviceId)"
