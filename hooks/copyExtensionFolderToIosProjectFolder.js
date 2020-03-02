@@ -118,7 +118,9 @@ module.exports = function(context) {
       data.forEach(function(folder) {
         if (folder.match(/\.xcodeproj$/)) {
           projectFolder = path.join(iosFolder, folder);
+          log('===> projectFolder: ' + projectFolder, 'success');
           projectName = path.basename(folder, '.xcodeproj');
+          log('===> projectName: ' + projectName, 'success');
         }
       });
     }
