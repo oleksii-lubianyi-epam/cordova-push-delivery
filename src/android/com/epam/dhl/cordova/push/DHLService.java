@@ -32,8 +32,19 @@ public class DHLService extends FCMService {
         body.setMethod("acknowldge");
         ServiceData data = new ServiceData();
         data.setMessageId(id);
+		data.setDeviceId(getUuid());
         body.setData(data);
         return body;
+    }
+
+    /**
+     * Get the device's Universally Unique Identifier (UUID).
+     *
+     * @return
+     */
+    public String getUuid() {
+        String uuid = Settings.Secure.getString(this.cordova.getActivity().getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        return uuid;
     }
 
     private static class PostCallback implements Callback<ServiceResponse> {
