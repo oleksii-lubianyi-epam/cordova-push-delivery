@@ -118,9 +118,7 @@ module.exports = function(context) {
       data.forEach(function(folder) {
         if (folder.match(/\.xcodeproj$/)) {
           projectFolder = path.join(iosFolder, folder);
-          log('===> projectFolder: ' + projectFolder, 'success');
           projectName = path.basename(folder, '.xcodeproj');
-          log('===> projectName: ' + projectName, 'success');
         }
       });
     }
@@ -163,7 +161,7 @@ module.exports = function(context) {
     copyFolderRecursiveSync(
       appDelegateFolder,
       path.join(context.opts.projectRoot, 'platforms/ios'),
-      'dhltest2/Classes/'
+      path.join(projectName, 'Classes')
     );
     log('Successfully copied App Delegate folder!', 'success');
     console.log('\x1b[0m'); // reset

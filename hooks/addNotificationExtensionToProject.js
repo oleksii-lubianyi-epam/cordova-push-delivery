@@ -169,7 +169,7 @@ module.exports = function (context) {
       var widgetName = projectName + ' Notification Extension';
       log('Your widget will be named: ' + widgetName, 'info');
 
-      var widgetFolder = path.join(context.opts.projectRoot, 'plugins/com-epam-dhl-cordova-push-delivery/src/ios/');
+      var widgetFolder = path.join(context.opts.projectRoot, 'plugins/com-epam-dhl-cordova-push-delivery/src/ios/ext/');
       var sourceFiles = [];
       var resourceFiles = [];
       var configFiles = [];
@@ -244,7 +244,7 @@ module.exports = function (context) {
               break;
             // Resources like storyboards, images, fonts, etc.
             default:
-              // resourceFiles.push(file);
+              resourceFiles.push(file);
               break;
           }
         }
