@@ -2,6 +2,7 @@ package com.epam.dhl.cordova.push;
 
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.adobe.phonegap.push.FCMService;
@@ -20,10 +21,11 @@ public class DHLService extends FCMService {
 
     @Override
     public void onMessageReceived(RemoteMessage message) {
-
-        String id = message.getMessageId();
-        Log.d(LOG_TAG, "onMessage - id: " + id);
-        RetrofitService.getInstance().getDHLApi().postMessage(createPostMessage(id)).enqueue(new PostCallback(id));
+        if (NotificationManagerCompat.from(getApplicationContext()).areNotificationsEnabled()) {
+            String id = message.getMessageId();
+            Log.d(LOG_TAG, "onMessage - id: " + id);
+            RetrofitService.getInstance().getDHLApi().postMessage(createPostMessage(id)).enqueue(new PostCallback(id));
+        }
         super.onMessageReceived(message);
     }
 
